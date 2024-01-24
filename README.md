@@ -90,6 +90,7 @@ Depending on your version of Vault, you may need to launch the `API Explorer` th
 ```diff
 # This token needs to be configured in the mysql plugin, which we'll talk about later.
 - Please note in particular that tokens have a lifecycle, depending on a few settings
+- You need to renew the token at regular intervals to ensure that it is valid.
 + For more information on vault tokens, see https://developer.hashicorp.com/vault/docs/concepts/tokens
 ```
 
@@ -144,6 +145,47 @@ The following `client_token` is the result we want
   }
 }
 ```
+
+### 3. MYSQL Config
+
+#### 3.1 Find out the plugin directory 
+
+```sh
+SHOW VARIABLES LIKE 'plugin_dir';
+```
+
+Place the `keyring_vault.so` plugin into the plugin directory. 
+
+#### 3.2 MySQL 8 Configuration parameters
+
+create `keyring_vault.conf` file and place under /var/lib/mysql-keyring/ directory
+```js
+vault_url = http://yourvaultserverip:8200
+secret_mount_point = tdestore/dc/master
+token = hvs.CAESILHdRmHRXSwiiNTJBZWF1eBClR4jALAa3FgIi5HiwRKFGigKImh2cy44SFpmQVI3QkhXTGVMOXpTbUxoT2N1Nk0ubDBuOTMQyJ8D
+vault_ca = /etc/vault_ca/vault.pem  #depending on your vault server enable ca or not
+```
+
+MYSQL configuration
+```sh
+early-plugin-load="keyring_vault=keyring_vault.so"
+loose-keyring_vault_config="/var/lib/mysql-keyring/keyring_vault.conf"
+binlog_encryption = ON
+default_table_encryption = ON
+innodb_redo_log_encrypt = ON
+innodb_undo_log_encrypt = ON
+```
+
+#### 3.3 Make sure MySQL is allowed to send http request
+```sh
+setsebool -P mysql_connect_http 1
+```
+
+restart mysql server, that's all!
+
+
+
+
 
 
 
