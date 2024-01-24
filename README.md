@@ -54,10 +54,12 @@ The following steps assumes that you've already got the `Root Token` through Vau
 
 Login http://yourvaultserverip:8200/ui with root token obtained from the previous step.
 
-* Create Secret Engine, you can replace `testing` with another name that makes sense.
+**Note: You can do all of the following steps from the command line, the following demonstration is only via the UI**
+
+#### Create Secret Engine, you can replace `testing` with another name that makes sense.
 ![image](https://github.com/maodi1229/mysqltdevault/assets/56705346/876130d9-f169-44c6-9917-55b255d0e3f7)
 
-* Create ACL Policy, `testing` needs to be consistent with the naming in the `Create Secret Engine` step
+#### Create ACL Policy, `testing` needs to be consistent with the naming in the `Create Secret Engine` step
 ![image](https://github.com/maodi1229/mysqltdevault/assets/56705346/00ba01c4-befd-46ed-9f49-2df8365fdc6f)
 ```javascript
 path "testing/*" {
@@ -69,9 +71,14 @@ path "testing/dc1/*" {
 }
 ```
 
-* Create token with ACL Policy to access Secret Engine
+#### Create token with ACL Policy to access Secret Engine 
 
+Depending on your version of Vault, you may need to launch the `API Explorer` through the Web Cli
+![Untitled](https://github.com/maodi1229/mysqltdevault/assets/56705346/176b9647-fafd-40bc-a5d9-8dbb77298311)
 
+**Create token through `API Explorer`**
+
+This token needs to be configured in the mysql plugin, which we'll talk about later.
 
 
 
