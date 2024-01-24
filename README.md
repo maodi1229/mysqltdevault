@@ -87,9 +87,14 @@ Depending on your version of Vault, you may need to launch the `API Explorer` th
 
 **Create token through `API Explorer`**
 
-This token needs to be configured in the mysql plugin, which we'll talk about later.
+```diff
+# This token needs to be configured in the mysql plugin, which we'll talk about later.
+- Please note in particular that tokens have a lifecycle, depending on a few settings
++ For more information on vault tokens, see https://developer.hashicorp.com/vault/docs/concepts/tokens
+```
 
 API Endpoint: 
+
 ```js
 POST /auth/token/create
 
@@ -139,6 +144,8 @@ The following `client_token` is the result we want
   }
 }
 ```
+
+
 
 
 
