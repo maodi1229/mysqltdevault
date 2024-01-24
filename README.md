@@ -4,7 +4,7 @@
 
 MYSQL Community Edition plugin - enable Transparent Data Encryption (TDE). 
 
-Communicates with HashiCorp Vault for back end storage.
+Master Key storage method： Communicates with HashiCorp Vault for backend storage.
 
 You can use the compiled files directly, or you can use the source code to make changes and then compile your own plugin!
 
@@ -48,7 +48,30 @@ ui = true
 
 For additional details, please see Hashicorp's official documentation from https://developer.hashicorp.com/vault/docs/configuration.
 
-The following steps assumes that you've already got the `Root Token` through initialization.
+The following steps assumes that you've already got the `Root Token` through Vault Server initialization.
 
 ### HashiCorp Vault Config
+
+Login http://yourvaultserverip:8200/ui with root token obtained from the previous step.
+
+* Create Secret Engine, you can replace `testing` with another name that makes sense.
+![image](https://github.com/maodi1229/mysqltdevault/assets/56705346/876130d9-f169-44c6-9917-55b255d0e3f7)
+
+* Create ACL Policy, `testing` needs to be consistent with the naming in the `Create Secret Engine` step
+![image](https://github.com/maodi1229/mysqltdevault/assets/56705346/00ba01c4-befd-46ed-9f49-2df8365fdc6f)
+```javascript
+path "testing/*" {
+   capabilities = ["list"]
+}
+
+path "testing/dc1/*" {
+   capabilities = ["create", "read", "delete", "update", "list"]
+}
+```
+
+* Create token with ACL Policy to access Secret Engine
+
+
+
+
 
