@@ -20,7 +20,7 @@ For information on how to compile the mysql plugin, see the official mysql docum
 
 ## how to use keyring_vault.so
 
-### HashiCorp Vault Setup
+### 1. HashiCorp Vault Setup
 
 * Fetch the HashiCorp Vault binary.
 
@@ -44,34 +44,43 @@ storage "file" {
 
 ui = true
 
+
+# default 1.5 * 365 days, please adjust this value according to your actual situation
+default_lease_ttl = "13140h"
+
+# 3 * 365 days = 26280h, please adjust this value according to your actual situation
+max_lease_ttl = "26280h"
+
 ```
 
 For additional details, please see Hashicorp's official documentation from https://developer.hashicorp.com/vault/docs/configuration.
 
 The following steps assumes that you've already got the `Root Token` through Vault Server initialization.
 
-### HashiCorp Vault Config
+### 2. HashiCorp Vault Config
 
 Login http://yourvaultserverip:8200/ui with root token obtained from the previous step.
 
 **Note: You can do all of the following steps from the command line, the following demonstration is only via the UI**
 
-#### Create Secret Engine, you can replace `testing` with another name that makes sense.
-![image](https://github.com/maodi1229/mysqltdevault/assets/56705346/876130d9-f169-44c6-9917-55b255d0e3f7)
+#### 2.1 Create Secret Engine, you can replace `tdestore` with another name that makes sense.
+![image](https://github.com/maodi1229/mysqltdevault/assets/56705346/9ed98592-5a47-4a42-b620-49855be52ff9)
 
-#### Create ACL Policy, `testing` needs to be consistent with the naming in the `Create Secret Engine` step
-![image](https://github.com/maodi1229/mysqltdevault/assets/56705346/00ba01c4-befd-46ed-9f49-2df8365fdc6f)
+
+#### 2.2 Create ACL Policy, `tdestore` needs to be consistent with the naming in the `Create Secret Engine` step
+![image](https://github.com/maodi1229/mysqltdevault/assets/56705346/efa47a6e-aac0-4bdf-8f13-8c208a9c21f2)
+
 ```javascript
-path "testing/*" {
+path "tdestore/*" {
    capabilities = ["list"]
 }
 
-path "testing/dc1/*" {
+path "tdestore/dc/*" {
    capabilities = ["create", "read", "delete", "update", "list"]
 }
 ```
 
-#### Create token with ACL Policy to access Secret Engine 
+#### 2.3 Create token with ACL Policy to access Secret Engine 
 
 Depending on your version of Vault, you may need to launch the `API Explorer` through the Web Cli
 ![Untitled](https://github.com/maodi1229/mysqltdevault/assets/56705346/176b9647-fafd-40bc-a5d9-8dbb77298311)
@@ -79,6 +88,58 @@ Depending on your version of Vault, you may need to launch the `API Explorer` th
 **Create token through `API Explorer`**
 
 This token needs to be configured in the mysql plugin, which we'll talk about later.
+
+API Endpoint: 
+```js
+POST /auth/token/create
+
+body:{
+  "display_name": "mysqlt001",
+  "no_parent": true,
+  "period": "700h",
+  "policies": [
+    "tdestore"
+  ],
+  "renewable": true,
+  "type": "service"
+}
+```
+![image](https://github.com/maodi1229/mysqltdevault/assets/56705346/71d5aecb-2d1b-4939-82f3-bf9737e9075f)
+
+The following `client_token` is the result we want
+
+```js
+{
+  "request_id": "353c7e3b-cf25-3617-cca5-5c2064376f97",
+  "lease_id": "",
+  "renewable": false,
+  "lease_duration": 0,
+  "data": null,
+  "wrap_info": null,
+  "warnings": null,
+  "auth": {
+    "client_token": "hvs.CAESILHdRmHRXSwiiNTJBZWF1eBClR4jALAa3FgIi5HiwRKFGigKImh2cy44SFpmQVI3QkhXTGVMOXpTbUxoT2N1Nk0ubDBuOTMQyJ8D",
+    "accessor": "Nh48tOTwDJ7bNaafO6zhYbMn.l0n93",
+    "policies": [
+      "default",
+      "tdestore"
+    ],
+    "token_policies": [
+      "default",
+      "tdestore"
+    ],
+    "metadata": null,
+    "lease_duration": 2520000,
+    "renewable": true,
+    "entity_id": "",
+    "token_type": "service",
+    "orphan": true,
+    "mfa_requirement": null,
+    "num_uses": 0
+  }
+}
+```
+
 
 
 
