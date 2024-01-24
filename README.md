@@ -2,7 +2,7 @@
 
 ## Description
 
-MYSQL Community Edition plugin - enable Transparent Data Encryption (TDE). 
+MYSQL Community Edition plugin for Transparent Data Encryption (TDE). 
 
 Master Key storage method： Communicates with HashiCorp Vault for backend storage.
 
