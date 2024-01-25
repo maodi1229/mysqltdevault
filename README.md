@@ -146,6 +146,52 @@ The following `client_token` is the result we want
 }
 ```
 
+#### 2.4 Renew token through `API Explorer`
+
+API Endpoint: 
+
+```js
+POST /auth/token/renew
+
+body:{
+  "increment": "700h",
+  "token": "hvs.CAESILHdRmHRXSwiiNTJBZWF1eBClR4jALAa3FgIi5HiwRKFGigKImh2cy44SFpmQVI3QkhXTGVMOXpTbUxoT2N1Nk0ubDBuOTMQyJ8D"
+}
+```
+![ScreenHunter 2156](https://github.com/maodi1229/mysqltdevault/assets/56705346/6ca77dcd-f0ee-4df4-b62a-6980f338ce12)
+
+```js
+{
+  "request_id": "8d565bf0-7caa-ed6e-453e-4f0c617cd121",
+  "lease_id": "",
+  "renewable": false,
+  "lease_duration": 0,
+  "data": null,
+  "wrap_info": null,
+  "warnings": null,
+  "auth": {
+    "client_token": "hvs.CAESILHdRmHRXSwiiNTJBZWF1eBClR4jALAa3FgIi5HiwRKFGigKImh2cy44SFpmQVI3QkhXTGVMOXpTbUxoT2N1Nk0ubDBuOTMQyJ8D",
+    "accessor": "Nh48tOTwDJ7bNaafO6zhYbMn.l0n93",
+    "policies": [
+      "default",
+      "tdestore"
+    ],
+    "token_policies": [
+      "default",
+      "tdestore"
+    ],
+    "metadata": null,
+    "lease_duration": 2520000,
+    "renewable": true,
+    "entity_id": "",
+    "token_type": "service",
+    "orphan": true,
+    "mfa_requirement": null,
+    "num_uses": 0
+  }
+}
+```
+
 ### 3. MYSQL Config
 
 #### 3.1 Find out the plugin directory 
