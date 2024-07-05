@@ -30,7 +30,6 @@ bool Vault_base64::encode(const void *src, size_t src_len,
   // provide access to underlying  data when they are empty. Calling reserve on
   // those containers does not help.
   if (::base64_encode(src, src_len, base64_encoded_text.get()) != 0) {
-    memset_s(base64_encoded_text.get(), 0, memory_needed, memory_needed);
     return true;
   }
   if (format == Format::SINGLE_LINE) {
