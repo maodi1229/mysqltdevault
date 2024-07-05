@@ -59,7 +59,6 @@ bool Vault_credentials_parser::parse_line(
     logger->log(MY_ERROR_LEVEL, err_ss.str().c_str());
     return true;
   }
-  *value = line.substr(eq_sign_pos + 1, line.size() - (eq_sign_pos + 1));
   boost::trim(*value);
 
   if (value->empty()) {
@@ -85,7 +84,6 @@ bool Vault_credentials_parser::parse(const std::string &file_url,
     logger->log(MY_ERROR_LEVEL, "Could not open file with credentials.");
     return true;
   }
-  BOOST_SCOPE_EXIT(&file_io, &file) { file_io.close(file, MYF(MY_WME)); }
   BOOST_SCOPE_EXIT_END
 
   if (file_io.seek(file, 0, MY_SEEK_END, MYF(MY_WME)) == MY_FILEPOS_ERROR) {
